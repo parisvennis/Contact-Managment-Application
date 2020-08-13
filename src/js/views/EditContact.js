@@ -3,36 +3,41 @@ import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import PropTypes from "prop-types";
 
-export const AddContact = props => {
+export const EditContact = props => {
 	const [state, setState] = useState({
-		name: null,
-		address: null,
+		full_name: null,
+        address: null,
+        agenda_slug: null,
+        created_at: null,
+        id: null,
 		phone: null,
 		email: null
-	});
-
-	// function handleSave(actions) {
-	// 	if (props.match.path === "/add") {
-	// 		actions.addContacts(state.name, state.address, state.phone, state.email);
-	// 	} else actions.editContact(state.name, state.address, state.phone, state.email, +props.match.params.index);
-	// }
+    });
+    updateState= (contact) => {
+        setState(contact)};
 
 	return (
 		<div className="container">
 			<Context.Consumer>
-				{({ actions, store }) => (
-					<div>
-						<h1 className="text-center mt-5">Add a new contact</h1>
+				{({ actions, store }) => {
+                    var contact = store.allContacts.find(element => element.id==props.match.params.id);
+                    updateState(contact);
+
+                    return (
+                        <div>
+						<h1 className="text-center mt-5">Edit contact</h1>
 						<form>
 							<div className="form-group">
 								<label>Full Name</label>
 								<input
 									onChange={event => {
-										setState({ ...state, name: event.target.value });
+										setState({ ...state, full_name: event.target.value });
 									}}
 									type="text"
 									className="form-control"
 									placeholder="Full Name"
+                                    defaultValue=""
+                                    defaultValue= {contact.full_name}
 								/>
 							</div>
 							<div className="form-group">
@@ -43,7 +48,8 @@ export const AddContact = props => {
 									}}
 									type="email"
 									className="form-control"
-									placeholder="Enter email"
+                                    placeholder="Enter email"
+                                    defaultValue= {contact.email}
 								/>
 							</div>
 							<div className="form-group">
@@ -54,7 +60,8 @@ export const AddContact = props => {
 									}}
 									type="phone"
 									className="form-control"
-									placeholder="Enter phone"
+                                    placeholder="Enter phone"
+                                    defaultValue= {contact.phone}
 								/>
 							</div>
 							<div className="form-group">
@@ -65,13 +72,20 @@ export const AddContact = props => {
 									}}
 									type="text"
 									className="form-control"
-									placeholder="Enter address"
+                                    placeholder="Enter address"
+                                    defaultValue= {contact.address}
 								/>
 							</div>
 							<button
 								// disabled={(!state.name && !state.address) && !state.phone || !state.email}
 								onClick={() => {
-									actions.addContacts(state.name, state.address, state.phone, state.email);
+									actions.editContact(
+										state.full_name,
+										state.address,
+										state.phone,
+										state.email,
+										state.id
+									);
 								}}
 								type="button"
 								className="btn btn-primary form-control">
@@ -82,12 +96,14 @@ export const AddContact = props => {
 							</Link>
 						</form>
 					</div>
-				)}
+                    );
+					
+                    }}
 			</Context.Consumer>
 		</div>
 	);
 };
 
-AddContact.propTypes = {
+EditContact.propTypes = {
 	match: PropTypes.object
 };
