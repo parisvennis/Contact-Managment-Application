@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 export const AddContact = props => {
 	const [state, setState] = useState({
-		name: null,
+		full_name: null,
 		address: null,
 		phone: null,
 		email: null
@@ -28,7 +28,7 @@ export const AddContact = props => {
 								<label>Full Name</label>
 								<input
 									onChange={event => {
-										setState({ ...state, name: event.target.value });
+										setState({ ...state, full_name: event.target.value });
 									}}
 									type="text"
 									className="form-control"
@@ -69,9 +69,9 @@ export const AddContact = props => {
 								/>
 							</div>
 							<button
-								// disabled={(!state.name && !state.address) && !state.phone || !state.email}
+								// disabled={(!state.full_name && !state.address) && !state.phone || !state.email}
 								onClick={() => {
-									actions.addContacts(state.name, state.address, state.phone, state.email);
+									actions.addContacts(state.full_name, state.address, state.phone, state.email);
 								}}
 								type="button"
 								className="btn btn-primary form-control">

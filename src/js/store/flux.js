@@ -4,29 +4,92 @@ const getState = ({ getStore, setStore }) => {
 			allContacts: []
 		},
 		actions: {
-			addContact: (name, phone, address, email, id) => {
-				const store = getStore();
-				// must do this to have access to the store = this is different than state
-				const newContact = [{ name, address, phone, email, id }];
-				const contactArr = store.allContacts.concat(newContact);
-				// concat = combines two pieces of data
-				setStore({ allContacts: contactArr });
-				// switched from allContacts to contactArr
+			addContacts: (name, address, number, email) => {
+				fetch("https://assets.breatheco.de/apis/fake/contact/", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						agenda_slug: "vennisparis",
+						full_name: name,
+						email: email,
+						address: address,
+						phone: number
+					})
+				})
+					.then(res => res.json())
+					.then(() => {
+						fetch("https://assets.breatheco.de/apis/fake/contact/agenda/vennisparis")
+							.then(red => red.json())
+							.then(data => setStore({ allContacts: data }));
+					});
+            // catch(error => alert(error.message));
+				// build fetch w/ post method body contents - look up in api
+				// in 2nd .then do another fetch to get current contects of database(api)
+				// save data to allContacts
 			},
-			editContact: (name, phone, address, email, id) => {
+
+			deleteContacts: indexDel => {
 				const store = getStore();
-				const modContact = { name, phone, address, email, id };
-				const updatedContact = store.allContacts.map((value, i) => (index === iDel ? modContact : value));
-				setStore({ allContacts: updatedContact });
+
+				fetch(`https://assets.breatheco.de/apis/fake/contact/${indexDel}`, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(res => res.json())
+					.then(() => {
+						fetch("https://assets.breatheco.de/apis/fake/contact/agenda/moldovanjason")
+							.then(red => red.json())
+							.then(data => setStore({ allContacts: data }));
+					});
+			},
+			// build fetch w/ delete method
+			// same as line 13
+
+			editContact: (name, address, number, email) => {
+            // catch(error) {
+            //        alert(error);
+            //    }
+				fetch(`https://assets.breatheco.de/apis/fake/contact/${id}`, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						agenda_slug: "vennisparis",
+						full_name: name,
+						email: email,
+						address: address,
+						phone: number
+					})
+				})
+					.then(res => res.json())
+					.then(() => {
+						fetch("https://assets.breatheco.de/apis/fake/contact/agenda/vennisparis")
+							.then(red => red.json())
+							.then(data => setStore({ allContacts: data }));
+					});
+
+				// build fetch w/ put method
+				// 2nd .then will have a fetch like line13
 			}
-		},
-		deleteContact: iDel => {
-			const store = getStore();
-			const updatedContact = store.allContacts.filter((value, i) => i !== iDel);
-			setStore({ allContacts: updatedContact });
+
+			// addContacts(...args) {
+			//     const store = getStore();
+			//     const newObjArr = args.reduce((obj, value) => {
+			//     const newObj = {};
+			//         newObj[value] = value
+			//         return {...obj, newObj}});
+			//     const newState = store.allContact.concat(newObjArr)
+			//     setStore({allContact: newState})
+			// },
+
+			//(Arrow) Functions that update the Store
+			// Remember to use the scope: scope.state.store & scope.setState()
 		}
-		//(Arrow) Functions that update the Store
-		// Remember to use the scope: scope.state.store & scope.setState()
 	};
 };
 

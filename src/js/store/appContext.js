@@ -22,7 +22,7 @@ const injectContext = PassedComponent => {
 		);
 
 		useEffect(() => {
-			fetch("https://assets.breatheco.de/apis/fake/contact/agenda/moldovanjason")
+			fetch("https://assets.breatheco.de/apis/fake/contact/agenda/vennisparis")
 				.then(red => red.json())
 				.then(data => setState({ ...state, store: { allContacts: data } }));
 		}, []);
